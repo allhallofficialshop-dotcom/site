@@ -1,0 +1,22 @@
+:root{
+  --bg:#0B0B0C;
+  --glass: rgba(255,255,255,.08);
+  --gold:#D4AF37;
+  --glow: rgba(212,175,55,0.6);
+}
+*{font-family: system-ui,-apple-system,Segoe UI,Arial,Helvetica,sans-serif}
+body{background:var(--bg) url('wall.png') center/cover fixed no-repeat;}
+.glass{background:var(--glass); border:1px solid rgba(212,175,55,.25); box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset; backdrop-filter: blur(10px);}
+.section-title{font-weight:700; font-size:1.125rem; color:var(--gold); margin-bottom:0.75rem;}
+.navlink{color:var(--gold); opacity:.85}
+.navlink:hover{opacity:1}
+.btn-glow{background: linear-gradient(135deg, rgba(212,175,55,.15), rgba(212,175,55,.05)); border:1px solid rgba(212,175,55,.25); box-shadow:0 0 18px -6px var(--glow);}
+.btn-glow:hover{transform: translateY(-1px) scale(1.01); box-shadow:0 0 22px -4px var(--glow);}
+.card{transition:.25s transform, .25s box-shadow, .25s filter; transform: translateY(0);}
+.card:hover{transform: translateY(-3px) scale(1.01); box-shadow:0 0 24px -8px var(--glow);}
+.input{background:var(--glass); border:1px solid rgba(212,175,55,.25); border-radius:12px; padding:.6rem .8rem; width:100%}
+.tab-btn{background:var(--glass); border:1px solid rgba(212,175,55,.25); border-radius:12px; padding:.5rem .8rem;}
+.tab-btn.active{box-shadow:0 0 12px -6px var(--glow);}
+.badge{display:inline-block; font-size:.75rem; padding:.1rem .5rem; border-radius:999px; border:1px solid rgba(212,175,55,.25); background:rgba(212,175,55,.1); color:var(--gold);}
+.hide{display:none}
+.line{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.4),transparent);}
