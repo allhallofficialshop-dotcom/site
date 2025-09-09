@@ -106,7 +106,7 @@ auth.onAuthStateChanged(u=>{ window.currentUser = u || null; });
 // admin email list check helper (emails stored under /roles/adminEmails/encodedEmail:true)
 function encEmail(e){ return (e||'').replaceAll('.', ','); }
 
-// ================== Load Products ==================
+// Load Products with debug
 async function loadHomeProducts(){
   const container = document.getElementById('productGrid');
   if(!container) return;
@@ -115,7 +115,13 @@ async function loadHomeProducts(){
   try {
     const snap = await db.ref('products').once('value');
     const list = [];
-    snap.forEach(ch => list.push({ id: ch.key, ...ch.val() }));
+    snap.forEach(ch => {
+      const val = ch.val();
+      console.log("Product loaded:", ch.key, val); // 👈 debug log
+      if(val && val.name && val.price){
+        list.push({ id: ch.key, ...val });
+      }
+    });
 
     if(list.length === 0){
       container.innerHTML = `<div class="p-4 opacity-70">No products yet.</div>`;
@@ -129,7 +135,7 @@ async function loadHomeProducts(){
   }
 }
 
-// ================== Load Banners ==================
+// Load Banners with debug
 async function loadBanners(){
   const container = document.getElementById('bannerSlider');
   if(!container) return;
@@ -138,7 +144,13 @@ async function loadBanners(){
   try {
     const snap = await db.ref('banners').once('value');
     const list = [];
-    snap.forEach(ch => list.push({ id: ch.key, ...ch.val() }));
+    snap.forEach(ch => {
+      const val = ch.val();
+      console.log("Banner loaded:", ch.key, val); // 👈 debug log
+      if(val && val.image){
+        list.push({ id: ch.key, ...val });
+      }
+    });
 
     if(list.length === 0){
       container.innerHTML = `<div class="p-4 opacity-70">No banners yet.</div>`;
@@ -147,7 +159,7 @@ async function loadBanners(){
 
     container.innerHTML = list.map(b =>
       `<a href="${b.link||'#'}">
-         <img src="${b.image}" class="w-full h-64 md:h-80 object-cover rounded-2xl" alt="">
+         <img src="${b.image}" class="w-full h-64 md:h-80 object-cover rounded-2xl" alt="banner">
        </a>`
     ).join('');
   } catch(err){
@@ -155,14 +167,3 @@ async function loadBanners(){
     container.innerHTML = `<div class="p-4 text-red-400">Failed to load banners.</div>`;
   }
 }
-
-// ================== Init ==================
-document.addEventListener('DOMContentLoaded', ()=>{
-  if(document.getElementById('productGrid')){
-    loadHomeProducts();
-  }
-  if(document.getElementById('bannerSlider')){
-    loadBanners();
-  }
-  getCart();
-});
