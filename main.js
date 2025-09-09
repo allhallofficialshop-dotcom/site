@@ -107,63 +107,34 @@ auth.onAuthStateChanged(u=>{ window.currentUser = u || null; });
 function encEmail(e){ return (e||'').replaceAll('.', ','); }
 
 // Load Products with debug
-async function loadHomeProducts(){
-  const container = document.getElementById('productGrid');
-  if(!container) return;
-  container.innerHTML = `<div class="p-4 opacity-70">Loading products…</div>`;
-
-  try {
-    const snap = await db.ref('products').once('value');
-    const list = [];
-    snap.forEach(ch => {
-      const val = ch.val();
-      console.log("Product loaded:", ch.key, val); // 👈 debug log
-      if(val && val.name && val.price){
-        list.push({ id: ch.key, ...val });
-      }
-    });
-
-    if(list.length === 0){
-      container.innerHTML = `<div class="p-4 opacity-70">No products yet.</div>`;
-      return;
-    }
-
-    container.innerHTML = list.map(productCard).join('');
-  } catch(err){
-    console.error('loadHomeProducts', err);
-    container.innerHTML = `<div class="p-4 text-red-400">Failed to load products.</div>`;
-  }
+async function loadHomeProducts() {
+  const snap = await db.ref('products').once('value');
+  const container = document.getElementById('featuredProducts');
+  if (!container) return;
+  container.innerHTML = '';
+  snap.forEach(ch => {
+    const product = { id: ch.key, ...ch.val() };
+    console.log("Product:", product);
+    container.innerHTML += productCard(product);
+  });
 }
+
 
 // Load Banners with debug
-async function loadBanners(){
-  const container = document.getElementById('bannerSlider');
-  if(!container) return;
-  container.innerHTML = `<div class="p-4 opacity-70">Loading banners…</div>`;
-
-  try {
-    const snap = await db.ref('banners').once('value');
-    const list = [];
-    snap.forEach(ch => {
-      const val = ch.val();
-      console.log("Banner loaded:", ch.key, val); // 👈 debug log
-      if(val && val.image){
-        list.push({ id: ch.key, ...val });
-      }
-    });
-
-    if(list.length === 0){
-      container.innerHTML = `<div class="p-4 opacity-70">No banners yet.</div>`;
-      return;
+async function loadBanners() {
+  const snap = await db.ref('banners').once('value');
+  const container = document.getElementById('bannerContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  snap.forEach(ch => {
+    const data = ch.val();
+    console.log("Banner:", data);
+    if (data && data.url) {
+      container.innerHTML += `
+        <div class="w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-4">
+          <img src="${data.url}" class="w-full h-full object-cover" />
+        </div>`;
     }
-
-    container.innerHTML = list.map(b =>
-      `<a href="${b.link||'#'}">
-         <img src="${b.image}" class="w-full h-64 md:h-80 object-cover rounded-2xl" alt="banner">
-       </a>`
-    ).join('');
-  } catch(err){
-    console.error('loadBanners', err);
-    container.innerHTML = `<div class="p-4 text-red-400">Failed to load banners.</div>`;
-  }
+  });
 }
+
