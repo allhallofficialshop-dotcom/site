@@ -109,7 +109,7 @@ function encEmail(e){ return (e||'').replaceAll('.', ','); }
 // Load Products with debug
 async function loadHomeProducts() {
   const snap = await db.ref('products').once('value');
-  const container = document.getElementById('featuredProducts');
+  const container = document.getElementById('productGrid'); // fixed id
   if (!container) return;
   container.innerHTML = '';
   snap.forEach(ch => {
@@ -119,11 +119,10 @@ async function loadHomeProducts() {
   });
 }
 
-
 // Load Banners with debug
 async function loadBanners() {
   const snap = await db.ref('banners').once('value');
-  const container = document.getElementById('bannerContainer');
+  const container = document.getElementById('bannerSlider'); // fixed id
   if (!container) return;
   container.innerHTML = '';
   snap.forEach(ch => {
@@ -135,6 +134,9 @@ async function loadBanners() {
           <img src="${data.url}" class="w-full h-full object-cover" />
         </div>`;
     }
+  });
+}
+
   });
 }
 
