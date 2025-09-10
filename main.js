@@ -40,13 +40,27 @@ function productCard(p){
   const priceHtml = hasDiscount
     ? `<div><span class="opacity-70 line-through mr-2">${fmt(p.price||0)}</span><span class="text-yellow-300">${fmt(finalPrice)}</span></div>`
     : `<div class="text-yellow-300">${fmt(finalPrice)}</div>`;
+  
+  // Create the object to pass to addToCart
+  const itemData = {
+    id: p.id,
+    name: p.name,
+    price: finalPrice,
+    image: p.images?.[0]||'',
+    qty: 1,
+    variant: null
+  };
+  
+  // Use JSON.stringify to safely encode the object for the onclick attribute
+  const itemJson = JSON.stringify(itemData).replace(/"/g, "'");
+
   return `<div class="glass card rounded-2xl overflow-hidden">
     <a href="product.html?id=${p.id}"><img src="${p.images?.[0]||'assets/product-placeholder.png'}" class="w-full h-48 object-cover" alt=""></a>
     <div class="p-3 space-y-1 relative">
       ${badge}
       <a href="product.html?id=${p.id}" class="font-semibold line-clamp-2">${p.name||'Unnamed'}</a>
       ${priceHtml}
-      <button class="btn-glow px-3 py-1 rounded-xl" onclick='addToCart({id:"${p.id}", name:"${p.name}", price:${finalPrice}, image:"${p.images?.[0]||''}", qty:1, variant:null})'>Add</button>
+      <button class="btn-glow px-3 py-1 rounded-xl" onclick='addToCart(${itemJson})'>Add</button>
     </div>
   </div>`;
 }
