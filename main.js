@@ -139,4 +139,8 @@ async function loadBanners() {
 
   });
 }
-
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Home.js loaded, calling loaders…");
+  loadBanners();
+  loadHomeProducts();
+});
